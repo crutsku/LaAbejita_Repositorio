@@ -1,4 +1,4 @@
-/* --- Configuraci�n Base --- */
+/* --- Configuraci�n Base --- */
 html {
     font-size: 14px;
     position: relative;
@@ -32,7 +32,7 @@ body {
     text-decoration: none;
 }
 
-/* --- Botones Estilo Aplicaci�n --- */
+/* --- Botones Estilo Aplicaci�n --- */
 .btn-platillo-top, .btn-seleccionar {
     background-color: #fdd835;
     border: none;
@@ -69,7 +69,7 @@ body {
     padding: 20px 0;
 }
 
-/* Tarjetas de selecci�n (Lista Izquierda) */
+/* Tarjetas de selecci�n (Lista Izquierda) */
 .platillo-selection-card {
     display: flex;
     background: white;
@@ -130,4 +130,174 @@ body {
     border: none;
     border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- Vista Registro --- */
+
+/* --- Contenedor principal registro --- */
+.registro-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-family: 'Inter', 'Poppins', sans-serif;
+}
+
+/* Tarjeta blanca sólida */
+.registro-page .col-md-4 {
+    max-width: 480px; /* limita ancho máximo */
+    width: 100%;
+    background: #ffffff; /* blanco sólido */
+    border: 1px solid rgba(200, 200, 200, 0.4); /* borde gris suave */
+    border-radius: 16px;
+    padding: 10px 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    margin-bottom: 60px; /* agrega espacio debajo del contenedor */
+}
+body {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 80px; /* espacio para el footer */
+}
+
+/* Título principal en negro */
+.registro-page h3 {
+    text-align: center; /* alineado a la derecha */
+    font-size: 30px;
+    font-weight: 600; /* semi-bold */
+    color: #222222; /* negro */
+    margin-bottom: -1px;
+    letter-spacing: 0.5px;
+}
+
+/* Inputs y select (igual que antes) */
+.registro-page .form-control {
+    background: rgba(255,255,255,0.1); /* semi-transparente sobre blanco */
+    border: 1px solid rgba(180,180,180,0.4); /* gris claro */
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: #dcdcdc; /* gris claro */
+    font-weight: 500; /* semi-bold */
+    font-family: 'Inter', 'Poppins', sans-serif;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.registro-page .form-control::placeholder {
+    color: rgba(150,150,150,0.8); /* gris placeholder */
+}
+
+.registro-page .form-control:focus {
+    border-color: #fdd835;
+    box-shadow: 0 0 0 4px rgba(253,216,53,0.25);
+    background: rgba(255,255,255,0.2);
+    color: #222; /* para que el texto del input sea legible sobre blanco */
+}
+
+/* Botón amarillo */
+.registro-page .btn-warning {
+    width: 100%;
+    background: linear-gradient(135deg,#fdd835,#ffca28);
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.25s ease;
+    letter-spacing: 0.3px;
+}
+
+.registro-page .btn-warning:hover {
+    background: linear-gradient(135deg,#fbc02d,#fdd835);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+}
+
+
+.registro-page .row {
+    justify-content: flex-end; /* mueve todo a la derecha */
+}
+
+.registro-subtitle {
+    text-align: center; /* alineado como el título */
+    font-size: 14px;
+    font-weight: 500; /* semi-bold */
+    color: #555555; /* gris medio */
+    margin-bottom: 8px;
+}
+
+/* Fondo con overlay (no cambia) */
+body {
+    background: url('/img/fondocomida.jpg') center/cover no-repeat fixed;
+    position: relative;
+}
+
+.registro-click {
+    color: #fdd835;       /* amarillo Abejita */
+    font-weight: 600;      /* semi-bold */
+    cursor: pointer;       /* indica que es clickeable */
+    margin-left: 8px;      /* separa un poco del texto */
+    transition: all 0.2s;
+}
+
+.registro-click:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
+}
+
+.forgot-password {
+    font-size: 13px;
+    color: #888888;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.forgot-password:hover {
+    color: #555555;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: -1;
+}
+
+/* Responsivo */
+@media (max-width: 767px) {
+    .registro-page .col-md-4 {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    .registro-page h3 {
+        text-align: center;
+        font-size: 24px;
+    }
+}
+#rol {
+    appearance: none;          /* elimina estilo por defecto */
+    -webkit-appearance: none;  /* Safari/Chrome */
+    -moz-appearance: none;     /* Firefox */
+    background-image: url('/img/arrow-down.svg'); /* flecha personalizada */
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 30px;       /* espacio para la flecha */
 }
