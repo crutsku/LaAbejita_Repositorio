@@ -44,6 +44,11 @@
                     <input type="text" id="nombreOrden" value="Orden" class="form-control border-0 bg-light rounded-3" />
                 </div>
 
+				<div class="mb-4">
+                    <label class="small fw-bold text-muted">Número telefónico:</label>
+                    <input type="text" id="numTelefonico" value="Numero" class="form-control border-0 bg-light rounded-3" />
+                </div>
+
                 <div class="row fw-bold text-muted small border-bottom pb-2 mb-0">
                     <div class="col-5">Nombre</div>
                     <div class="col-2 text-center">Cant.</div>
@@ -144,10 +149,13 @@
 
         var nombre = document.getElementById('nombreOrden').value;
         if (!nombre) nombre = 'Orden';
+		var numeroTel = document.getElementById('numTelefonico').value;
+		if (!numeroTel) numeroTel = null;
 
         var data = {
             nombreOrden: nombre,
-            detalles: orden
+            detalles: orden,
+			numeroTel: numeroTel,
         };
 
         fetch('/Home/FinalizarOrden', {
