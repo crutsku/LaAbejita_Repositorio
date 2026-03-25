@@ -5,15 +5,18 @@ html {
     min-height: 100%;
 }
 
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
+@media (max-width: 767px) {
+    .registro-page {
+        justify-content: center; 
     }
+
+        .registro-page .col-md-4 {
+            margin-right: 0;
+        }
 }
 
 body {
-    margin-bottom: 60px;
-    background-color: #f8f9fa; /* Fondo gris claro para resaltar tarjetas blancas */
+    background-color: #f8f9fa; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -149,30 +152,37 @@ body {
 
 /* --- Contenedor principal registro --- */
 .registro-page {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     font-family: 'Inter', 'Poppins', sans-serif;
+    background: url('/img/fondocomida.jpg') center/cover no-repeat fixed;
+    position: relative;
+    z-index: 1;
+}
+
+.registro-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.7); 
+    z-index: 0;
 }
 
 /* Tarjeta blanca sólida */
 .registro-page .col-md-4 {
-    max-width: 480px; /* limita ancho máximo */
+    max-width: 480px;
     width: 100%;
-    background: #ffffff; /* blanco sólido */
-    border: 1px solid rgba(200, 200, 200, 0.4); /* borde gris suave */
+    background: #ffffff;
     border-radius: 16px;
-    padding: 10px 15px;
+    padding: 30px 45px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    margin-left: auto !important;
-    margin-right: 0 !important;
-    margin-bottom: 60px; /* agrega espacio debajo del contenedor */
-}
-body {
-    position: relative;
-    min-height: 100vh;
-    padding-bottom: 80px; /* espacio para el footer */
+    margin-left: auto;
+    margin-right: 70px; /* separación del borde */
+    transform: scale(0.9); 
+    transform-origin: right center; 
+    transition: transform 0.3s ease;
 }
 
 /* Título principal en negro */
@@ -187,12 +197,12 @@ body {
 
 /* Inputs y select (igual que antes) */
 .registro-page .form-control {
-    background: rgba(255,255,255,0.1); /* semi-transparente sobre blanco */
-    border: 1px solid rgba(180,180,180,0.4); /* gris claro */
+    background: rgba(255,255,255,0.1); 
+    border: 1px solid rgba(180,180,180,0.4); 
     border-radius: 12px;
     padding: 12px 14px;
-    color: #dcdcdc; /* gris claro */
-    font-weight: 500; /* semi-bold */
+    color: #dcdcdc; 
+    font-weight: 500; 
     font-family: 'Inter', 'Poppins', sans-serif;
     margin-bottom: 15px;
     transition: all 0.3s ease;
@@ -243,7 +253,6 @@ body {
 
 /* Fondo con overlay (no cambia) */
 body {
-    background: url('/img/fondocomida.jpg') center/cover no-repeat fixed;
     position: relative;
 }
 
@@ -300,4 +309,16 @@ body::before {
     background-position: right 12px center;
     background-size: 12px;
     padding-right: 30px;       /* espacio para la flecha */
+}
+.alerta-flotante {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 60%; 
+    max-width: 800px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border-radius: 10px; 
+    padding: 15px; 
 }

@@ -1,9 +1,14 @@
 ﻿@model LaAbejita.Models.RegisterRequest
 
+<div id="mensajeError" class="alert alert-danger alert-dismissible fade show alerta-flotante" role="alert" style="display:none;">
+    <span id="textoError"></span>
+    <button type="button" class="btn-close" onclick="document.getElementById('mensajeError').style.display='none'" aria-label="Close"></button>
+</div>
+
 <div class="container-fluid registro-page">
+    
     <div class="row justify-content-center">
         <div class="col-md-4">
-
             <h3 class="fw-bold mb-3">Registra tu cuenta</h3>
 
             <div class="d-flex justify-content-center mb-4">
@@ -72,31 +77,50 @@
             contrasena: document.getElementById("contrasena").value
         };
 
-        if (!data.nombre || !data.apellidoPaterno || !data.username || !data.rol || !data.contrasena) {
-            alert("Debes llenar los campos obligatorios");
-            return;
-        }
-
         fetch('/Home/Registro', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        })
+        })     
+
         .then(response => {
             if (!response.ok) {
-                throw new Error("Error al registrar usuario");
-            }
-            return response.text();
+              // Leemos el texto que enviamos desde C# (UsernameEnUso o TelefonoEnUso)
+            return response.text().then(text => {
+                if (text === "UsernameEnUso") {
+                    throw new Error("El nombre de usuario está en uso");
+                } else if (text === "TelefonoEnUso") {
+                    throw new Error("El número celular está en uso");
+                } else if(text === "CamposObligatorios"){
+
+                    throw new Error("Se deben llenar los campos obligatorios");
+                }
+                else {
+                    throw new Error("Error al registrar: " + text);
+                }
+            });
+               
+        }
+        return response.text();
         })
         .then(result => {
-            alert("Usuario registrado correctamente");
-            window.location.href = "/Home/Index";
+            window.location.replace("/Home/Index");
         })
         .catch(error => {
-            alert(error.message);
+        var cuadroError = document.getElementById("mensajeError");
+        var texto = document.getElementById("textoError");
+
+        texto.innerHTML = error.message;
+
+        // Lo mostramos
+        cuadroError.style.display = "block";
         });
+        if (window.history.replaceState) {
+        // Esto borra la página de registro del historial de navegación
+        window.history.replaceState(null, null, window.location.href);
+    }
     }
 
 </script>

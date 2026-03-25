@@ -115,7 +115,7 @@ namespace LaAbejita.Controllers
                     idOrden = Convert.ToInt32(cmd.ExecuteScalar());
                 }
 
-                // 2️⃣ Insertar en OrdenDetalle
+                // Insertar en OrdenDetalle
                 foreach (var d in request.detalles)
                 {
                     var subtotal = d.precioUnitario * d.cantidad;
@@ -177,7 +177,7 @@ namespace LaAbejita.Controllers
                     }
                 }
 
-                // 🔹 Traer detalles
+                // Traer detalles
                 var queryDetalles = @"
             SELECT i.Nombre, d.Cantidad, d.Comentarios, d.Subtotal
             FROM OrdenDetalle d
@@ -208,7 +208,7 @@ namespace LaAbejita.Controllers
             ViewBag.Total = total;
             ViewBag.Status = status;
             ViewBag.Fecha = fecha;
-            ViewBag.Detalles = detalles; // 👈 mandamos la lista
+            ViewBag.Detalles = detalles; // mandamos la lista
 
             return View();
         }
@@ -247,23 +247,53 @@ namespace LaAbejita.Controllers
             return RedirectToAction("Index"); //unha vez el usuario haya agregado el platillo desde el front se va al metodo Index 
         }
 
-        [HttpPost]
         public IActionResult Registro([FromBody] RegisterRequest register)
         {
+            if(register == null ||
+                string.IsNullOrWhiteSpace(register.Username) ||
+                string.IsNullOrWhiteSpace(register.NumeroCelular) ||
+                string.IsNullOrWhiteSpace(register.Nombre) ||
+                string.IsNullOrWhiteSpace(register.Contrasena) ||
+                (register.Rol != RolUsuario.Administrador && register.Rol != RolUsuario.Cocinero)) 
+            {
+                return BadRequest("CamposObligatorios");
+            }
             var connectionString = _configuration.GetConnectionString("SQLServer");
-
-            const string query = @"INSERT INTO Restaurante.dbo.Usuarios
-        (Nombre, ApellidoPaterno, ApellidoMaterno, Username, Rol, NumeroCelular, Contrasena)
-        VALUES (@Nombre, @ApellidoPaterno, @ApellidoMaterno, @Username, @Rol, @NumeroCelular, @Contrasena)";
 
             try
             {
                 using var conn = new SqlConnection(connectionString);
-                using var cmd = new SqlCommand(query, conn)
-                {
-                    CommandTimeout = 300
-                };
+                conn.Open();
 
+                // Validar Username único
+                const string checkUserQuery = "SELECT COUNT(1) FROM Usuarios WHERE Username = @Username";
+                using (var cmdCheckUser = new SqlCommand(checkUserQuery, conn))
+                {
+                    cmdCheckUser.Parameters.AddWithValue("@Username", register.Username);
+                    if ((int)cmdCheckUser.ExecuteScalar() > 0)
+                    {
+                        //el nombre de usuario en uso
+                        return BadRequest("UsernameEnUso");
+                    }
+                }
+
+                // Validar NumeroCelular único
+                const string checkPhoneQuery = "SELECT COUNT(1) FROM Usuarios WHERE NumeroCelular = @NumeroCelular";
+                using (var cmdCheckPhone = new SqlCommand(checkPhoneQuery, conn))
+                {
+                    cmdCheckPhone.Parameters.AddWithValue("@NumeroCelular", register.NumeroCelular);
+                    if ((int)cmdCheckPhone.ExecuteScalar() > 0)
+                    {
+                        return BadRequest("TelefonoEnUso");
+                    }
+                }
+
+                // Si todo está bien, seguimos
+                const string query = @"INSERT INTO Restaurante.dbo.Usuarios
+            (Nombre, ApellidoPaterno, ApellidoMaterno, Username, Rol, NumeroCelular, Contrasena)
+            VALUES (@Nombre, @ApellidoPaterno, @ApellidoMaterno, @Username, @Rol, @NumeroCelular, @Contrasena)";
+
+                using var cmd = new SqlCommand(query, conn) { CommandTimeout = 300 };
                 cmd.Parameters.AddWithValue("@Nombre", register.Nombre);
                 cmd.Parameters.AddWithValue("@ApellidoPaterno", register.ApellidoPaterno);
                 cmd.Parameters.AddWithValue("@ApellidoMaterno", register.ApellidoMaterno);
@@ -272,15 +302,12 @@ namespace LaAbejita.Controllers
                 cmd.Parameters.AddWithValue("@NumeroCelular", register.NumeroCelular);
                 cmd.Parameters.AddWithValue("@Contrasena", register.Contrasena);
 
-                conn.Open();
-
                 cmd.ExecuteNonQuery();
-
-                TempData["SuccessMessage"] = "Usuario registrado correctamente";
             }
-            catch
+            catch (Exception ex)
             {
-
+                TempData["ErrorMessage"] = "Ocurrió un error al procesar el registro";
+                return StatusCode(500, "Error interno del servidor");
             }
 
             return RedirectToAction("Index");
