@@ -1,0 +1,104 @@
+﻿@model LaAbejita.Models.LoginRequest
+
+<div id="mensajeError" class="alert alert-danger alert-dismissible fade show alerta-flotante" role="alert" style="display:none;">
+    <span id="textoError"></span>
+    <button type="button" class="btn-close" onclick="document.getElementById('mensajeError').style.display='none'" aria-label="Close"></button>
+</div>
+
+<div class="container-fluid registro-page">
+
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <h3 class="fw-bold mb-3">Ingresa tu cuenta</h3>
+
+
+            <div class="row mb-2">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <select id="rol" class="form-control">
+                        <option value="">Selecciona un rol</option>
+                        <option value="1">Administrador</option>
+                        <option value="2">Cocinero</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" id="username" class="form-control" placeholder="Nombre de usuario">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <input type="password" id="contrasena" class="form-control" placeholder="Crea una contraseña">
+            </div>
+
+            <button class="btn btn-warning w-100" onclick="ingresarUsuario()">
+                Ingresar 
+            </button>
+
+            <p class="forgot-password mt-2 text-center">
+                ¿Olvidaste tu contraseña?
+            </p>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function ingresarUsuario() {
+
+        var data = {
+            username: document.getElementById("username").value,
+            rol: parseInt(document.getElementById("rol").value),
+            contrasena: document.getElementById("contrasena").value
+        };
+
+        fetch('/Home/UserData', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+        .then(response => {
+
+            if (!response.ok) {
+                  // Leemos el texto que enviamos desde C# 
+                return response.text().then(text => {
+                    if (text === "CamposObligatorios"){
+                        throw new Error("Se deben llenar todos los campos");
+                    } else if(text === "UsuarioNoEncontrado"){
+
+                        throw new Error("El usuario no existe");
+                    } else if(text === "ContrasenaIncorrecta"){
+
+                        throw new Error("La contraseña es incorrecta");
+                    }else if(text === "RolIncorrecto"){
+
+                        throw new Error("El rol no concuerda con el usuario");
+                    }
+                    else {
+                        throw new Error("Error al registrar: " + text);
+                    }
+                });
+
+            }
+        return response.text();
+        })
+        .then(result => {
+            window.location.replace("/Home/Index");
+        })
+        .catch(error => {
+        var cuadroError = document.getElementById("mensajeError");
+        var texto = document.getElementById("textoError");
+
+        texto.innerHTML = error.message;
+
+        // Lo mostramos
+        cuadroError.style.display = "block";
+        });
+        if (window.history.replaceState) {
+        // Esto borra la página de registro del historial de navegación
+        window.history.replaceState(null, null, window.location.href);
+    }
+    }
+
+</script>
