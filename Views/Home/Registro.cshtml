@@ -14,7 +14,7 @@
             <div class="d-flex justify-content-center mb-4">
                 <p class="registro-subtitle mb-0">
                     ¿Ya comenzaste con tu registro?
-                    <span class="registro-click" onclick="alert('Botón click presionado!')">Click</span>
+                    <span class="registro-click" onclick="location.href='@Url.Action("Login", "Home")'">Click</span>
                 </p>
             </div>
 
@@ -96,6 +96,12 @@
                 } else if(text === "CamposObligatorios"){
 
                     throw new Error("Se deben llenar los campos obligatorios");
+                } else if(text === "LongitudErronea"){
+
+                    throw new Error("El usuario y contraseña deben ser mayor a 5 carácteres");
+                } else if(text === "NumeroErroneo"){
+
+                    throw new Error("Ingresa un número de celular correcto");
                 }
                 else {
                     throw new Error("Error al registrar: " + text);

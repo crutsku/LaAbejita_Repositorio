@@ -1,11 +1,12 @@
-/* --- Configuraci�n Base --- */
+/* --- Configuracion Base --- */
+
 html {
     font-size: 14px;
     position: relative;
     min-height: 100%;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) { /* --- Ajustes para celular --- */
     .registro-page {
         justify-content: center; 
     }
@@ -15,59 +16,366 @@ html {
         }
 }
 
-body {
-    background-color: #f8f9fa; 
+body { /* --- Establece un fondo gris claro y tipo de letra genérica --- */
+    background-color: #f8f9fa;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
 }
 
-/* --- Navbar Amarilla (Estilo La Abejita) --- */
-.navbar-abeja {
-    background-color: #fdd835 !important;
-    padding: 0.8rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    border: none !important;
+
+/* Responsivo */
+@media (max-width: 767px) {
+    .registro-page .col-md-4 {
+        width: 90%;
+        padding: 30px 20px;
+    }
+
+    .registro-page h3 {
+        text-align: center;
+        font-size: 24px;
+    }
 }
 
-.nav-link-abeja {
-    color: white !important;
-    font-weight: 500;
-    margin: 0 15px;
-    text-decoration: none;
+
+
+
+
+
+/* ==========================================
+   VISTA DE REGISTRO / LOGIN 
+   ========================================== */
+
+/* Contenedor principal que ocupa toda la pantalla con la imagen de comida */
+.registro-page { 
+
+    height: 100vh; /* --- 10% altura*/
+    display: flex;
+    justify-content: flex-end; /* Empuja todo a la derecha*/
+    align-items: center;
+    font-family: 'Inter', 'Poppins', sans-serif;
+    background: url('/img/fondocomida.jpg') center/cover no-repeat fixed;
+    position: relative; /* --- Asegura que este elemento sea la base para todo lo que se ponga encima*/
+    z-index: 1;
+}
+    .registro-page .row {
+        justify-content: flex-end; /* mueve todo a la derecha */
+    }
+
+/* Overlay oscuro específico para la imagen de fondo de comida */
+.registro-page::before { 
+    content: "";
+    position: absolute; /* ---Para que ocupe toda la pantalla*/
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 0; /* --- Coloca la capa detrás del formulario pero delante ce la imagen*/
 }
 
+/* Tarjeta blanca donde van los inputs */
+.registro-page .col-md-4 { 
+
+        max-width: 480px; /* --- Anchura de la tarjeta*/
+        width: 100%;
+        background: #ffffff; /* --- Color blanco*/
+        border-radius: 16px;
+        padding: 30px 45px; /* Crea espacio dentro de la tarjeta, o sea los bordes*/
+        box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        margin-left: auto;
+        margin-right: 70px; /* separación del borde */
+        transform: scale(0.9); /* --- reduce el tamaño de la tarjeta*/
+        transform-origin: right center;
+        transition: transform 0.3s ease;
+}
+
+    /* Estilo de los Títulos h3 */
+    .registro-page h3 { 
+        text-align: center; /* alineado al centro */
+        font-size: 30px;
+        font-weight: 600; /* semi-bold */
+        color: #222222; /* negro */
+        margin-bottom: -1px;
+        letter-spacing: 0.5px; 
+    }
+
+/* Subtítulos o preguntas como "¿Ya tienes cuenta?" */
+    .registro-subtitle { 
+        text-align: center; /* alineado como el título */
+        font-size: 14px;
+        font-weight: 500; /* semi-bold */
+        color: #555555; /* gris medio */
+        margin-bottom: 8px;
+    }
+
+/* Estilo de los inputs (cajas de texto) */
+    .registro-page .form-control { 
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(180,180,180,0.4); /* --- Borde gris muy clarito*/
+        border-radius: 12px; /* --- Rodea esquinas*/
+        padding: 12px 14px;
+        color: #dcdcdc;
+        font-weight: 500;
+        font-family: 'Inter', 'Poppins', sans-serif;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+    }
+
+        /* Color del texto de sugerencia dentro del input */
+    .registro-page .form-control::placeholder {
+            color: rgba(150,150,150,0.8); /* gris placeholder */
+    }
+
+        /* Efecto cuando el usuario hace clic en una caja de texto */
+    .registro-page .form-control:focus {
+            border-color: #fdd835; /* --- Borde a amarillo al seleccionar caja*/
+            box-shadow: 0 0 0 4px rgba(253,216,53,0.25);
+            background: rgba(255,255,255,0.2);
+            color: #222; /* para que el texto del input sea legible sobre blanco */
+    }
+
+    /* Botón amarillo del registro*/
+    .registro-page .btn-warning {
+        width: 100%;
+        background: linear-gradient(135deg,#fdd835,#ffca28);
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-weight: 600;
+        font-size: 15px;
+        transition: all 0.25s ease;
+        letter-spacing: 0.3px;
+    }
+
+        /* Efecto al pasar el mouse sobre el botón */
+        .registro-page .btn-warning:hover { 
+            background: linear-gradient(135deg,#fbc02d,#fdd835);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+        }
+
+/* Enlace "¿Olvidaste tu contraseña?" o "Click aquí" */
+.registro-click {
+    color: #fdd835; /* amarillo Abejita */
+    font-weight: 600; /* semi-bold */
+    cursor: pointer; /* indica que es clickeable */
+    margin-left: 8px; /* separa un poco del texto */
+    transition: all 0.2s;
+}
+ .registro-click:hover {
+        text-decoration: underline;
+        transform: scale(1.05);
+}
+.forgot-password {
+    font-size: 13px;
+    color: #888888;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+
+
+/* Quita la flecha fea por defecto de los select y pone una personalizada */
+
+#rol {
+    appearance: none; /* elimina estilo por defecto */
+    -webkit-appearance: none; /* Safari/Chrome */
+    -moz-appearance: none; /* Firefox */
+    background-image: url('/img/arrow-down.svg'); /* flecha personalizada */
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 12px;
+    padding-right: 30px; /* espacio para la flecha */
+}
+
+/* Mensajes de error que flotan arriba de la pantalla */
+.alerta-flotante {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: 60%;
+    max-width: 800px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+
+
+
+
+
+/* ==========================================
+   VISTA PRINCIPAL
+   ========================================== */
+
+/* Títulos con el color de marca oscuro */
+.abeja-title {
+    color: #2f2f2f;
+    font-weight: bold;
+}
 /* --- Botones Estilo Aplicaci�n --- */
 .btn-platillo-top, .btn-seleccionar {
-    background-color: #fdd835;
+    background-color: #fdd835; /* Color amarillo base */
     border: none;
     border-radius: 10px;
     padding: 8px 20px;
     font-weight: bold;
-    color: #333;
+    color: #333; /* Texto oscuro para contraste */
     transition: all 0.2s;
 }
-
+    /* Efectos al pasar el mouse sobre los botones */
     .btn-platillo-top:hover, .btn-seleccionar:hover {
-        background-color: #fbc02d;
-        transform: scale(1.02);
+        background-color: #fbc02d; /* Amarillo un poco más oscuro */
+        transform: scale(1.02); /* Crece ligeramente */
     }
+
+/* Ajustes para el formulario de agregar */
+.abeja-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
 
 /* --- Vista de Inventario (Tarjetas con Imagen) --- */
 .platillo-card {
     border: none !important;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Sombra muy sutil */
+    overflow: hidden; /* Evita que la imagen se salga de las esquinas redondeadas */
     background-color: #ffffff;
     transition: transform 0.3s ease;
+    position: relative;
 }
 
+    /* Efecto de elevación cuando pasas el mouse por la tarjeta del plato */
+    .platillo-card:hover {
+        transform: translateY(-5px);
+    }
+
+/* Control de las imágenes de los platos en el catálogo */
 .card-img-top {
     height: 180px;
-    object-fit: cover;
+    object-fit: cover; /* Recorta la imagen para que rellene el espacio sin deformarse */
     background-color: #f0f0f0;
 }
 
-/* --- Vista Crear Orden (Layout Dividido) --- */
+/* Tarjeta dondxe va la imagen */
+.top-card {
+    padding: 30px 45px; /* Crea espacio dentro de la tarjeta, o sea los bordes*/
+    margin-left: auto;
+    margin-right: 70px; /* separación del borde */
+}
+
+/* Boton dentro de la tarjeta con foto (eliminado) */
+.btn-eliminando {
+    background-color: #E30213; /* Color amarillo base */
+    border: none;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+    color: #F8F8FF; /* Texto oscuro para contraste */
+    transition: all 0.2s;
+}
+/* Efecto al pasar el mouse */
+.btn-eliminando:hover {
+    transform: scale(1.05); /* Aquí es donde crece (1.1 es un 10% más, se nota mejor) */
+    background-color: #FF0000; /* Opcional: un amarillo un poco más oscuro al tocarlo */
+}
+
+.btn-editar {
+    background: transparent;
+    border: 1px solid #dcdcdc; /* Un gris muy suave y delgado */
+    border-radius: 10px;
+    padding: 8px 20px;
+    color: #8C8B8B;
+    font-weight: 600; /* Texto semi-negrita para que resalte */
+    font-size: 0.9rem; /* Tamaño de letra adecuado */
+}
+
+/* ESTILO ÚNICO PARA LA X DE CERRAR EDICIÓN */
+.btn-cerrar-edicion {
+    /* (Flotando sobre la imagen) */
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+    /* 2. Forma Circular Perfecta */
+    width: 32px; /* Un poco más grande para que sea fácil de clickear */
+    height: 32px;
+    border-radius: 50%; /* Obliga a que sea un círculo */
+    /* 3. Colores y Fondo */
+    background-color: white; /* Círculo blanco */
+    color: #333; /* Color oscuro para la '×' */
+    border: none; /* Sin borde gris alrededor del círculo */
+    /* 4. EL SECRETO DEL CENTRADO PERFECTO */
+    display: flex; /* Usamos Flexbox, es lo más confiable */
+    justify-content: center; /* Centrado horizontal del texto '×' */
+    align-items: center; /* Centrado vertical del texto '×' */
+    padding: 0; /* ¡CRUCIAL! Cero padding para no mover la '×' */
+    /* 5. Estilo de la '×' */
+    font-size: 22px; /* Tamaño del símbolo */
+    line-height: 1; /* Evita que el símbolo 'brinque' verticalmente */
+    font-family: Arial, sans-serif; /* Arial centra muy bien este símbolo */
+    /* 6. Detalles Finales e Interactividad */
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15); /* Sombra suave para que flote */
+    transition: all 0.2s ease;
+    outline: none; /* Quita el borde azul al hacer click */
+}
+
+    /* Efecto Hover para la X */
+    .btn-cerrar-edicion:hover {
+        background-color: #f5f5f5; /* Gris muy claro al pasar el mouse */
+        transform: scale(1.05); /* Crece muy sutilmente */
+        color: #000;
+    }
+
+
+
+/* Tarjeta de eliminado */
+.alerta-eliminado {
+    /* Color y Bordes */
+    background-color: white;
+    border-radius: 30px; /* Puntas bien redondeadas */
+    /* El truco del Cuadrado */
+    width: 400px;
+    height: 215px;
+    /* Centrado Absoluto en Pantalla */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Sombra y Capa */
+    box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+    z-index: 9999; /* Para que esté por encima de las fotos de los platillos */
+    /* Contenido interno */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.btn-eliminacion, .btn-secundar {
+    background-color: #fdd835; /* Color amarillo base */
+    border: none;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+    color: #333; /* Texto oscuro para contraste */
+}
+
+
+
+
+
+/* ==========================================
+   VISTA CREAR ORDEM
+   ========================================== */
+
+/* --- (Layout Dividido) --- */
 .order-container {
     padding: 20px 0;
 }
@@ -83,14 +391,16 @@ body {
     overflow: hidden;
 }
 
+/* Miniatura de la comida en la lista de selección */
 .platillo-selection-img {
     width: 100px;
     height: 100px;
     object-fit: cover;
 }
 
+/* Espaciado del texto junto a la miniatura */
 .platillo-selection-info {
-    flex-grow: 1;
+    flex-grow: 1; /* Ocupa el resto del espacio disponible */
     padding: 12px;
 }
 
@@ -100,11 +410,11 @@ body {
     border-radius: 15px;
     padding: 25px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    position: sticky;
+    position: sticky; /* HACE QUE EL TICKET TE SIGA AL BAJAR LA PÁGINA */
     top: 20px;
 }
 
-/* Inputs minimalistas dentro del ticket */
+/* Inputs dentro del ticket (ej. Cantidad, Notas) */
 .ticket-input {
     border: none !important;
     background-color: #f8f9fa !important;
@@ -112,28 +422,19 @@ body {
     font-size: 0.9rem;
 }
 
-/* --- Utilidades --- */
+
+
+
+
+/* ==========================================
+   UTILIDADES
+   ========================================== */
+
+/* Clase para ocultar elementos mediante JS */
 .hidden {
     display: none;
 }
 
-.abeja-title {
-    color: #2f2f2f;
-    font-weight: bold;
-}
-
-.search-input {
-    border-radius: 25px;
-    padding: 10px 20px;
-    border: 1px solid #eee;
-}
-
-/* Ajustes para el formulario de agregar */
-.abeja-card {
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
 
 
 
@@ -148,177 +449,4 @@ body {
 
 
 
-/* --- Vista Registro --- */
 
-/* --- Contenedor principal registro --- */
-.registro-page {
-    height: 100vh;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    font-family: 'Inter', 'Poppins', sans-serif;
-    background: url('/img/fondocomida.jpg') center/cover no-repeat fixed;
-    position: relative;
-    z-index: 1;
-}
-
-.registro-page::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.7); 
-    z-index: 0;
-}
-
-/* Tarjeta blanca sólida */
-.registro-page .col-md-4 {
-    max-width: 480px;
-    width: 100%;
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 30px 45px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-    margin-left: auto;
-    margin-right: 70px; /* separación del borde */
-    transform: scale(0.9); 
-    transform-origin: right center; 
-    transition: transform 0.3s ease;
-}
-
-/* Título principal en negro */
-.registro-page h3 {
-    text-align: center; /* alineado a la derecha */
-    font-size: 30px;
-    font-weight: 600; /* semi-bold */
-    color: #222222; /* negro */
-    margin-bottom: -1px;
-    letter-spacing: 0.5px;
-}
-
-/* Inputs y select (igual que antes) */
-.registro-page .form-control {
-    background: rgba(255,255,255,0.1); 
-    border: 1px solid rgba(180,180,180,0.4); 
-    border-radius: 12px;
-    padding: 12px 14px;
-    color: #dcdcdc; 
-    font-weight: 500; 
-    font-family: 'Inter', 'Poppins', sans-serif;
-    margin-bottom: 15px;
-    transition: all 0.3s ease;
-}
-
-.registro-page .form-control::placeholder {
-    color: rgba(150,150,150,0.8); /* gris placeholder */
-}
-
-.registro-page .form-control:focus {
-    border-color: #fdd835;
-    box-shadow: 0 0 0 4px rgba(253,216,53,0.25);
-    background: rgba(255,255,255,0.2);
-    color: #222; /* para que el texto del input sea legible sobre blanco */
-}
-
-/* Botón amarillo */
-.registro-page .btn-warning {
-    width: 100%;
-    background: linear-gradient(135deg,#fdd835,#ffca28);
-    border: none;
-    border-radius: 12px;
-    padding: 14px;
-    font-weight: 600;
-    font-size: 15px;
-    transition: all 0.25s ease;
-    letter-spacing: 0.3px;
-}
-
-.registro-page .btn-warning:hover {
-    background: linear-gradient(135deg,#fbc02d,#fdd835);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.25);
-}
-
-
-.registro-page .row {
-    justify-content: flex-end; /* mueve todo a la derecha */
-}
-
-.registro-subtitle {
-    text-align: center; /* alineado como el título */
-    font-size: 14px;
-    font-weight: 500; /* semi-bold */
-    color: #555555; /* gris medio */
-    margin-bottom: 8px;
-}
-
-/* Fondo con overlay (no cambia) */
-body {
-    position: relative;
-}
-
-.registro-click {
-    color: #fdd835;       /* amarillo Abejita */
-    font-weight: 600;      /* semi-bold */
-    cursor: pointer;       /* indica que es clickeable */
-    margin-left: 8px;      /* separa un poco del texto */
-    transition: all 0.2s;
-}
-
-.registro-click:hover {
-    text-decoration: underline;
-    transform: scale(1.05);
-}
-
-.forgot-password {
-    font-size: 13px;
-    color: #888888;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: color 0.2s;
-}
-
-.forgot-password:hover {
-    color: #555555;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.55);
-    z-index: -1;
-}
-
-/* Responsivo */
-@media (max-width: 767px) {
-    .registro-page .col-md-4 {
-        width: 90%;
-        padding: 30px 20px;
-    }
-    .registro-page h3 {
-        text-align: center;
-        font-size: 24px;
-    }
-}
-#rol {
-    appearance: none;          /* elimina estilo por defecto */
-    -webkit-appearance: none;  /* Safari/Chrome */
-    -moz-appearance: none;     /* Firefox */
-    background-image: url('/img/arrow-down.svg'); /* flecha personalizada */
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 12px;
-    padding-right: 30px;       /* espacio para la flecha */
-}
-.alerta-flotante {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    width: 60%; 
-    max-width: 800px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    border-radius: 10px; 
-    padding: 15px; 
-}

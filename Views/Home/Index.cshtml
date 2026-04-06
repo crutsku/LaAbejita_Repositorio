@@ -1,5 +1,6 @@
 ﻿@model LaAbejita.Models.Inventory
 
+@* Mensaje de éxito tras eliminación (TempData sobrevive a la redirección) *@
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success d-flex align-items-center justify-content-between mx-auto shadow-sm" role="alert" id="successAlert" style="border-radius: 12px; max-width: 800px;">
@@ -9,6 +10,17 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
 }
+
+@* Modal de confirmación para eliminar *@
+<div class="alerta-eliminado hidden" id="AlertaAlElimin">
+    <p>Estás a punto de eliminar este platillo. No aparecerá en el menú.</p>
+    <p>¿Deseas proceder?</p>
+
+    <div class="modal-buttons">
+        <button class="btn-secundar">Cancelar</button>
+        <button class="btn-eliminacion">Confirmar</button>
+    </div>
+</div>
 
 <div class="container mb-5 mt-4">
     <div class="d-flex align-items-center">
@@ -34,6 +46,7 @@
     </div>
 </div>
 
+@* Formulario para nuevo platillo *@
 <div class="container">
     <form asp-action="GetDataPlate" method="post" class="card abeja-card p-4 mb-5 hidden" id="formAgregar">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -68,6 +81,7 @@
 
 <hr class="container my-5" style="opacity: 0.1;" />
 
+@* Listado de Platillos *@
 <div class="container pb-5">
     <div class="row">
         @if (ViewBag.ListaPlatillos != null)
@@ -75,10 +89,17 @@
             foreach (var item in ViewBag.ListaPlatillos)
             {
                 <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card platillo-card h-100">
+                    @* position-relative es vital para que la X no se mueva de la tarjeta *@
+                    <div class="card platillo-card h-100 position-relative">
+                        
                         <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=400&auto=format&fit=crop" class="card-img-top" alt="platillo">
 
-                        <div class="card-body">
+                        @* Botón X para cancelar edición *@
+                        <button type="button" class="btn-cerrar-edicion d-none" aria-label="Cerrar">
+                            &times;
+                        </button>
+
+                        <div class="card-body d-flex flex-column">
                             <div class="d-flex justify-content-between align-items-start">
                                 <h5 class="card-title mb-0 fw-bold">@item.NombrePlatillo</h5>
                                 <span class="card-precio fw-normal text-muted">$@item.Precio.ToString("F2")</span>
@@ -86,6 +107,15 @@
                             <p class="card-text text-muted small mt-2">
                                 @item.Descripcion
                             </p>
+
+                            <div class="d-flex justify-content-between gap-2 mt-auto pt-3">
+                                <button class="btn-editar flex-fill">
+                                    ✎ Editar
+                                </button>
+                                <button class="btn-eliminando d-none" onclick="eliminarPlatillo('@item.NombrePlatillo')">
+                                    Eliminar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -103,19 +133,79 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Mostrar formulario al hacer clic en + Platillo
+            
+            // 1. Manejo del formulario "Nuevo Platillo"
             $('#btnAgregar').on('click', function() {
                 $('#formAgregar').slideDown().removeClass('hidden');
                 $(this).fadeOut();
             });
 
-            // Cerrar formulario con la X
             $('#btnCerrar').on('click', function() {
                 $('#formAgregar').slideUp(function() {
                     $(this).addClass('hidden');
                 });
                 $('#btnAgregar').fadeIn();
             });
-        });
+
+            // 2. Lógica de los botones de la Tarjeta (Editar / X)
+            $('.btn-editar').on('click', function() {
+                var tarjeta = $(this).closest('.platillo-card');
+                
+                // Mostrar X y botón Eliminar
+                tarjeta.find('.btn-cerrar-edicion').removeClass('d-none').show();
+                $(this).siblings('.btn-eliminando').removeClass('d-none').show();
+                
+                // Ocultar botón Editar
+                $(this).hide();
+            });
+
+            $('.btn-cerrar-edicion').on('click', function() {
+                var tarjeta = $(this).closest('.platillo-card');
+                
+                // Ocultar X y botón Eliminar
+                $(this).hide().addClass('d-none');
+                tarjeta.find('.btn-eliminando').hide().addClass('d-none');
+                
+                // Volver a mostrar botón Editar
+                tarjeta.find('.btn-editar').fadeIn().show();
+            });
+
+            // 3. Modal de confirmación (Cancelar)
+            $('.btn-secundar').on('click', function() {
+            // .hide() lo oculta de inmediato sin desvanecimiento
+            $('#AlertaAlElimin').hide().addClass('hidden');
+            });
+
+        }); // Fin del Ready
+
+        // --- Funciones Globales para Eliminación ---
+        let nombreParaEliminar = "";
+
+        function eliminarPlatillo(nombre) {
+            nombreParaEliminar = nombre;
+            $('#AlertaAlElimin').show().removeClass('hidden');
+
+            $('.btn-eliminacion').off('click').on('click', function() {
+                ejecutarEliminacionReal();
+            });
+        }
+
+        function ejecutarEliminacionReal() {
+            const data = { NombrePlatillo: nombreParaEliminar };
+
+            fetch('/Home/EliminarPlatillo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Error al eliminar");
+                window.location.replace("/Home/Index");
+            })
+            .catch(error => {
+                alert(error.message);
+                $('#AlertaAlElimin').fadeOut();
+            });
+        }
     </script>
 }
