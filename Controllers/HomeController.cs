@@ -73,7 +73,7 @@ namespace LaAbejita.Controllers
                     }
                 }
 
-                // Si todo está bien, seguimos
+                // Si todo está bien, seguimos bien 
                 const string query = @"INSERT INTO Restaurante.dbo.Usuarios
             (Nombre, ApellidoPaterno, ApellidoMaterno, Username, Rol, NumeroCelular, Contrasena)
             VALUES (@Nombre, @ApellidoPaterno, @ApellidoMaterno, @Username, @Rol, @NumeroCelular, @Contrasena)";
