@@ -37,9 +37,7 @@ jobs:
         run: dir
 
       - name: Deploy with Helm
-        run: |
-          helm upgrade --install laabejita ./laabejita \
-            --set image.tag=${{ github.sha }}
+        run: helm upgrade --install laabejita ./laabejita --set image.tag=${{ github.sha }}
 
       - name: Verify rollout
         run: kubectl rollout status deployment/laabejita
