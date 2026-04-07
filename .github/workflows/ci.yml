@@ -9,38 +9,37 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Restore
-      run: dotnet restore
+      - name: Restore
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore
+      - name: Build
+        run: dotnet build --no-restore
 
-    - name: Test
-      run: dotnet test --no-build
+      - name: Test
+        run: dotnet test --no-build
 
-    - name: Build Docker image
-      run: docker build -t crutsku/laabejita
-:${{ github.sha }} .
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USER }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker image
+        run: docker build -t crutsku/laabejita:${{ github.sha }} .
 
-    - name: Push image
-      run: docker push crutsku/laabejita
-:${{ github.sha }}
+      - name: Push image
+        run: docker push crutsku/laabejita:${{ github.sha }}
 
-    - name: Debug files
-      run: dir
+      - name: Debug files
+        run: dir
 
-    # CD AUTOMÁTICO CON HELM
-    - name: Deploy with Helm
-      run: helm upgrade --install laabejita ./laabejita --set image.tag=${{ github.sha }}
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install laabejita ./laabejita \
+            --set image.tag=${{ github.sha }}
 
-    - name: Verify rollout
-      run: kubectl rollout status deployment/laabejita
+      - name: Verify rollout
+        run: kubectl rollout status deployment/laabejita
